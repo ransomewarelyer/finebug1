@@ -1,0 +1,3057 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finebug — Cutting Edge Digital Agency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #080807;
+      --white: #f6f1ea;
+      --cream: #ede7db;
+      --red: #e8452a;
+      --gold: #f0b429;
+      --muted: #8a7f72;
+      --dark: #111008;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    #cur,
+    #cur2 {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .2s, height .2s, background .2s;
+    }
+
+    #cur {
+      width: 10px;
+      height: 10px;
+      background: var(--red);
+      mix-blend-mode: difference;
+    }
+
+    #cur2 {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid rgba(255, 255, 255, .5);
+      mix-blend-mode: difference;
+      transition: all .12s ease;
+    }
+
+    @media(hover:none) {
+
+      #cur,
+      #cur2 {
+        display: none;
+      }
+
+      body {
+        cursor: auto;
+      }
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 900;
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all .35s;
+    }
+
+    nav.scrolled {
+      background: rgba(8, 8, 7, .93);
+      backdrop-filter: blur(16px);
+      padding: 14px 5%;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: .06em;
+    }
+
+    .nav-logo span {
+      color: var(--red);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(246, 241, 234, .7);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--white);
+    }
+
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 10px 22px !important;
+      font-family: 'Space Mono', monospace !important;
+      letter-spacing: .1em !important;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    }
+
+    .nav-cta:hover {
+      background: var(--white);
+      color: var(--black) !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: var(--white);
+      transition: all .3s;
+    }
+
+    .hamburger.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(8, 8, 7, .97);
+      z-index: 850;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: .02em;
+      transition: color .2s;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--red);
+    }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 5% 80px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 65% 55% at 75% 50%, rgba(232, 69, 42, .1) 0%, transparent 65%), radial-gradient(ellipse 45% 65% at 15% 85%, rgba(240, 180, 41, .06) 0%, transparent 60%);
+    }
+
+    .hero-grid-lines {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 36px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 6.5vw, 108px);
+      font-weight: 900;
+      line-height: .93;
+      letter-spacing: -.02em;
+      margin-bottom: 32px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--red);
+      display: block;
+    }
+
+    .hero-title .ghost {
+      -webkit-text-stroke: 2px rgba(246, 241, 234, .18);
+      color: transparent;
+      display: block;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(246, 241, 234, .5);
+      max-width: 420px;
+      margin-bottom: 44px;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--red);
+      color: var(--white);
+      padding: 16px 36px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-decoration: none;
+      transition: all .3s;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--black) !important;
+      box-shadow: 0 8px 24px rgba(232, 69, 42, .4);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(246, 241, 234, .2);
+      color: rgba(246, 241, 234, .7);
+      padding: 16px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-decoration: none;
+      transition: all .3s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--white);
+      color: var(--white);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 36px;
+      margin-top: 52px;
+      flex-wrap: wrap;
+    }
+
+    .h-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .h-stat-num span {
+      color: var(--red);
+    }
+
+    .h-stat-label {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* HERO VISUAL — ANIMATED SVG ILLUSTRATION */
+    .hero-visual {
+      position: relative;
+      height: 520px;
+    }
+
+    .hero-visual svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* MARQUEE */
+    .marquee-bar {
+      background: var(--red);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      animation: marquee 22s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .9);
+      padding: 0 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .marquee-item::after {
+      content: '✦';
+      font-size: 9px;
+      opacity: .5;
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--cream);
+      color: var(--black);
+      padding: 120px 5%;
+    }
+
+    .about-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .section-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 1px;
+      background: var(--red);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 4vw, 62px);
+      font-weight: 900;
+      line-height: 1.06;
+      letter-spacing: -.02em;
+      margin-bottom: 24px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--red);
+    }
+
+    .section-body {
+      font-size: 16px;
+      line-height: 1.85;
+      color: rgba(8, 8, 7, .6);
+      margin-bottom: 20px;
+    }
+
+    .about-visual-side {
+      position: relative;
+    }
+
+    .founder-card {
+      background: var(--white);
+      padding: 36px;
+      box-shadow: 24px 24px 0 rgba(232, 69, 42, .12);
+      border: 1px solid rgba(8, 8, 7, .08);
+    }
+
+    .founder-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .founder-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .founder-role {
+      font-size: 13px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .founder-bio {
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(8, 8, 7, .65);
+    }
+
+    .founder-socials {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .f-social {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(8, 8, 7, .15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      text-decoration: none;
+      color: var(--muted);
+      transition: all .2s;
+    }
+
+    .f-social:hover {
+      border-color: var(--red);
+      color: var(--red);
+      transform: translateY(-2px);
+    }
+
+    .founder-card:hover .founder-avatar img {
+      transform: scale(1.08);
+    }
+
+    .founder-avatar img {
+      transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .about-floater {
+      position: absolute;
+      top: -28px;
+      right: -20px;
+      background: var(--red);
+      color: var(--white);
+      padding: 20px 24px;
+      text-align: center;
+    }
+
+    .floater-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .floater-text {
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+
+    .about-stats-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .a-stat {
+      border-left: 3px solid var(--red);
+      padding-left: 16px;
+    }
+
+    .a-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .a-stat-label {
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* SERVICES */
+    #services {
+      background: var(--black);
+      padding: 120px 5%;
+    }
+
+    .services-header {
+      max-width: 1400px;
+      margin: 0 auto 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .services-intro {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 300px;
+      line-height: 1.7;
+      text-align: right;
+    }
+
+    .section-title.light {
+      color: var(--white);
+    }
+
+    .services-tabs {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .stab-nav {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .stab-nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    .stab-btn {
+      background: none;
+      border: none;
+      padding: 16px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      position: relative;
+      transition: color .2s;
+    }
+
+    .stab-btn.active {
+      color: var(--red);
+    }
+
+    .stab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--red);
+    }
+
+    .stab-content {
+      display: none;
+    }
+
+    .stab-content.active {
+      display: block;
+    }
+
+    .service-detail {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .service-detail-text .service-icon-big {
+      font-size: 56px;
+      margin-bottom: 24px;
+      display: block;
+      animation: bobble 3s ease-in-out infinite;
+    }
+
+    @keyframes bobble {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(-5deg);
+      }
+    }
+
+    .service-detail-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 20px;
+      line-height: 1.1;
+    }
+
+    .service-detail-text h3 em {
+      font-style: italic;
+      color: var(--red);
+    }
+
+    .service-detail-text p {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .service-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .service-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(246, 241, 234, .7);
+      line-height: 1.5;
+    }
+
+    .service-features li::before {
+      content: '✦';
+      color: var(--red);
+      font-size: 10px;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .service-visual {
+      position: relative;
+    }
+
+    /* PRICING CARDS */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 0;
+    }
+
+    .price-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 36px 28px;
+      position: relative;
+      transition: all .35s;
+      overflow: hidden;
+    }
+
+    .price-card.featured {
+      background: rgba(232, 69, 42, .08);
+      border-color: rgba(232, 69, 42, .3);
+    }
+
+    .price-card.featured::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: 16px;
+      right: -28px;
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .2em;
+      padding: 5px 32px;
+      transform: rotate(45deg);
+      transform-origin: center;
+    }
+
+    .price-card:hover {
+      border-color: rgba(232, 69, 42, .4);
+      transform: translateY(-4px);
+    }
+
+    .price-tier {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 12px;
+    }
+
+    .price-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .price-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1;
+      margin: 16px 0 4px;
+    }
+
+    .price-amount small {
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .price-period {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .price-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .price-items li {
+      font-size: 13px;
+      color: rgba(246, 241, 234, .65);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .price-items li .pi {
+      color: var(--red);
+      font-size: 10px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    .price-items li .pi.no {
+      color: var(--muted);
+    }
+
+    .price-btn {
+      display: block;
+      text-align: center;
+      padding: 13px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(232, 69, 42, .4);
+      color: var(--red);
+      transition: all .3s;
+    }
+
+    .price-btn:hover,
+    .price-card.featured .price-btn {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+
+    /* SERVICE ANIMATIONS */
+    .svc-anim {
+      width: 100%;
+      height: 320px;
+      position: relative;
+    }
+
+    /* WORK */
+    #work {
+      background: #0c0b08;
+      padding: 120px 5%;
+    }
+
+    .work-header {
+      max-width: 1400px;
+      margin: 0 auto 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .view-all {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(246, 241, 234, .45);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: color .2s;
+    }
+
+    .view-all:hover {
+      color: var(--white);
+    }
+
+    .work-filter {
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .wf-btn {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .2s;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .wf-btn.active {
+      color: var(--red);
+    }
+
+    .wf-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--red);
+    }
+
+    .work-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      transition: all .4s;
+      cursor: pointer;
+    }
+
+    .work-card:hover {
+      border-color: rgba(232, 69, 42, .3);
+    }
+
+    .work-card.span2 {
+      grid-column: span 2;
+    }
+
+    .work-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform .5s ease, opacity .5s;
+    }
+
+    .work-card:hover .work-card-bg {
+      transform: scale(1.04);
+      opacity: .35;
+    }
+
+    .work-cat {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .work-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      position: relative;
+      z-index: 2;
+      transition: color .2s;
+    }
+
+    .work-card.span2 .work-title {
+      font-size: 30px;
+    }
+
+    .work-card:hover .work-title {
+      color: var(--red);
+    }
+
+    .work-arrow {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 18px;
+      z-index: 2;
+      transition: all .3s;
+      opacity: 0;
+    }
+
+    .work-card:hover .work-arrow {
+      opacity: 1;
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    /* work card BGs */
+    .wbg1 {
+      background: radial-gradient(circle at 30% 50%, rgba(232, 69, 42, .35) 0%, transparent 60%), linear-gradient(135deg, #1c0a06 0%, #080807 100%);
+    }
+
+    .wbg2 {
+      background: radial-gradient(circle at 70% 30%, rgba(240, 180, 41, .3) 0%, transparent 60%), linear-gradient(135deg, #1a140a 0%, #080807 100%);
+    }
+
+    .wbg3 {
+      background: radial-gradient(circle at 50% 60%, rgba(78, 205, 196, .25) 0%, transparent 60%), linear-gradient(135deg, #0a1c1a 0%, #080807 100%);
+    }
+
+    .wbg4 {
+      background: radial-gradient(circle at 40% 40%, rgba(155, 89, 182, .3) 0%, transparent 60%), linear-gradient(135deg, #130a1c 0%, #080807 100%);
+    }
+
+    .wbg5 {
+      background: radial-gradient(circle at 60% 60%, rgba(52, 152, 219, .3) 0%, transparent 60%), linear-gradient(135deg, #0a0e1c 0%, #080807 100%);
+    }
+
+    .wbg6 {
+      background: radial-gradient(circle at 30% 70%, rgba(232, 69, 42, .2) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(240, 180, 41, .2) 0%, transparent 50%), linear-gradient(135deg, #1a1208 0%, #080807 100%);
+    }
+
+    /* PROCESS */
+    #process {
+      background: var(--cream);
+      color: var(--black);
+      padding: 120px 5%;
+    }
+
+    .process-header {
+      max-width: 1400px;
+      margin: 0 auto 80px;
+      text-align: center;
+    }
+
+    .process-header .section-body {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .process-timeline {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .process-timeline::before {
+      content: '';
+      position: absolute;
+      top: 52px;
+      left: calc(12.5%);
+      right: calc(12.5%);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(8, 8, 7, .2) 10%, rgba(8, 8, 7, .2) 90%, transparent);
+    }
+
+    .process-step {
+      text-align: center;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    .p-dot {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid rgba(8, 8, 7, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      position: relative;
+      z-index: 2;
+      transition: all .4s;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .process-step:hover .p-dot {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .p-dot-icon {
+      font-size: 28px;
+      transition: transform .3s;
+    }
+
+    .process-step:hover .p-dot-icon {
+      transform: scale(1.15);
+    }
+
+    .p-dot-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .15em;
+      color: var(--muted);
+      transition: color .3s;
+    }
+
+    .process-step:hover .p-dot-num {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .p-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .p-desc {
+      font-size: 13px;
+      line-height: 1.75;
+      color: rgba(8, 8, 7, .55);
+    }
+
+    /* TESTIMONIALS */
+    #testimonials {
+      background: var(--dark);
+      padding: 120px 5%;
+    }
+
+    .testimonials-header {
+      max-width: 1400px;
+      margin: 0 auto 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+    }
+
+    .testimonials-header .section-title {
+      color: var(--white);
+    }
+
+    .t-intro {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+      align-self: end;
+    }
+
+    .t-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .t-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 36px;
+      transition: border-color .3s;
+    }
+
+    .t-card:hover {
+      border-color: rgba(232, 69, 42, .25);
+    }
+
+    .t-stars {
+      color: var(--gold);
+      font-size: 16px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+
+    .t-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgba(246, 241, 234, .8);
+      margin-bottom: 28px;
+    }
+
+    .t-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .t-av {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .t-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--white);
+    }
+
+    .t-role {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .t-clients {
+      max-width: 1400px;
+      margin: 56px auto 0;
+      border-top: 1px solid var(--border);
+      padding-top: 48px;
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .t-client {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      padding: 20px;
+      border-right: 1px solid var(--border);
+    }
+
+    .t-client:last-child {
+      border-right: none;
+    }
+
+    .t-client-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .2s;
+    }
+
+    .t-client:hover .t-client-name {
+      color: var(--white);
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--black);
+      padding: 120px 5%;
+    }
+
+    .contact-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 100px;
+      align-items: start;
+    }
+
+    .contact-info .section-title {
+      color: var(--white);
+    }
+
+    .contact-tagline {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 48px;
+      max-width: 400px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .cd-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(232, 69, 42, .1);
+      border: 1px solid rgba(232, 69, 42, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .cd-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .cd-val {
+      font-size: 15px;
+      color: var(--white);
+    }
+
+    .contact-socials {
+      display: flex;
+      gap: 12px;
+      margin-top: 40px;
+    }
+
+    .cs-link {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      text-decoration: none;
+      color: var(--muted);
+      transition: all .2s;
+    }
+
+    .cs-link:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .contact-form {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid var(--border);
+      padding: 48px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(255, 255, 255, .04);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 15px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .2s;
+      resize: none;
+    }
+
+    .form-control::placeholder {
+      color: rgba(246, 241, 234, .25);
+    }
+
+    .form-control:focus {
+      border-color: rgba(232, 69, 42, .5);
+    }
+
+    select.form-control {
+      color: rgba(246, 241, 234, .6);
+    }
+
+    select.form-control option {
+      background: #111;
+      color: var(--white);
+    }
+
+    textarea.form-control {
+      height: 120px;
+    }
+
+    .btn-send {
+      background: var(--red);
+      color: var(--white);
+      border: none;
+      padding: 18px 48px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .3s;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .btn-send:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--white);
+    }
+
+    /* FOOTER */
+    footer {
+      background: #050504;
+      padding: 48px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: .06em;
+    }
+
+    .footer-logo span {
+      color: var(--red);
+    }
+
+    .footer-tagline {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: .08em;
+      transition: color .2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(138, 127, 114, .5);
+    }
+
+    /* WHATSAPP */
+    .wa-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 800;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(37, 211, 102, .35);
+      transition: transform .3s, box-shadow .3s;
+      animation: waPulse 2.5s ease-in-out infinite;
+    }
+
+    .wa-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 32px rgba(37, 211, 102, .5);
+      animation: none;
+    }
+
+    @keyframes waPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 24px rgba(37, 211, 102, .35);
+      }
+
+      50% {
+        box-shadow: 0 4px 36px rgba(37, 211, 102, .55), 0 0 0 10px rgba(37, 211, 102, .08);
+      }
+    }
+
+    .wa-btn svg {
+      width: 30px;
+      height: 30px;
+      fill: white;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .d1 {
+      transition-delay: .1s;
+    }
+
+    .d2 {
+      transition-delay: .2s;
+    }
+
+    .d3 {
+      transition-delay: .3s;
+    }
+
+    .d4 {
+      transition-delay: .4s;
+    }
+
+    .d5 {
+      transition-delay: .5s;
+    }
+
+    /* ============================
+   RESPONSIVE
+   ============================ */
+    @media(max-width:1100px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .hero-visual {
+        height: 300px;
+      }
+
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 56px;
+      }
+
+      .service-detail {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .testimonials-header {
+        grid-template-columns: 1fr;
+      }
+
+      .t-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .process-timeline {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .process-timeline::before {
+        display: none;
+      }
+
+      .work-card.span2 {
+        grid-column: span 1;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:768px) {
+      nav {
+        padding: 16px 5%;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero-title {
+        font-size: clamp(40px, 12vw, 72px);
+      }
+
+      .hero-visual {
+        height: 220px;
+      }
+
+      .hero-stats {
+        gap: 24px;
+      }
+
+      .hero-btns {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .services-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .services-intro {
+        text-align: left;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .process-timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .t-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .t-clients {
+        flex-direction: column;
+      }
+
+      .t-client {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .t-client:last-child {
+        border-bottom: none;
+      }
+
+      .contact-form {
+        padding: 28px 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-header {
+        gap: 28px;
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .about-floater {
+        right: 0;
+        top: -20px;
+      }
+
+      .stab-btn {
+        padding: 12px 16px;
+        font-size: 10px;
+      }
+    }
+
+    @media(max-width:480px) {
+
+      #hero,
+      #about,
+      #services,
+      #work,
+      #process,
+      #testimonials,
+      #contact {
+        padding-left: 6%;
+        padding-right: 6%;
+      }
+
+      .hero-title {
+        font-size: clamp(36px, 14vw, 60px);
+      }
+
+      .section-title {
+        font-size: clamp(30px, 8vw, 48px);
+      }
+
+      .hero-visual {
+        display: none;
+      }
+
+      .founder-card {
+        padding: 24px;
+      }
+
+      .contact-form {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cur"></div>
+  <div id="cur2"></div>
+
+  <!-- WHATSAPP -->
+  <a href="https://wa.me/919876543210?text=Hi%20Finebug!%20I%27m%20interested%20in%20your%20services." class="wa-btn"
+    target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#services" onclick="closeMobile()">Services</a>
+    <a href="#work" onclick="closeMobile()">Work</a>
+    <a href="#process" onclick="closeMobile()">Process</a>
+    <a href="#testimonials" onclick="closeMobile()">Reviews</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Fine<span>bug</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact" class="nav-cta">Get Quote</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid-lines"></div>
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="hero-tag">Digital Agency · Ahmedabad</div>
+        <h1 class="hero-title">
+          We Build<br>
+          <em>Digital</em><br>
+          <span class="ghost">Excellence</span>
+        </h1>
+        <p class="hero-sub">Websites, logos, company profiles &amp; social media setups — crafted with purpose,
+          delivered with precision, built to grow your business.</p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn-primary">Start Your Project <span>→</span></a>
+          <a href="#work" class="btn-ghost">See Our Work</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="h-stat-num">50<span>+</span></div>
+            <div class="h-stat-label">Projects Done</div>
+          </div>
+          <div>
+            <div class="h-stat-num">40<span>+</span></div>
+            <div class="h-stat-label">Happy Clients</div>
+          </div>
+          <div>
+            <div class="h-stat-num">4<span>yr</span></div>
+            <div class="h-stat-label">Experience</div>
+          </div>
+          <div>
+            <div class="h-stat-num">7<span>d</span></div>
+            <div class="h-stat-label">Avg. Delivery</div>
+          </div>
+        </div <div class="hero-visual">
+        <!-- Animated Finebug Logo illustration -->
+        <svg viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background Glow -->
+          <circle cx="260" cy="260" r="160" fill="url(#heroGlow)" opacity="0.4">
+            <animate attributeName="r" values="160;180;160" dur="6s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.4;0.6;0.4" dur="6s" repeatCount="indefinite" />
+          </circle>
+
+          <defs>
+            <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="var(--red)" stop-opacity="0.8" />
+              <stop offset="100%" stop-color="var(--red)" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="var(--red)" />
+              <stop offset="100%" stop-color="var(--gold)" />
+            </linearGradient>
+          </defs>
+
+          <!-- Logo Inner Container -->
+          <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-15; 0,0" dur="5s"
+              repeatCount="indefinite" />
+
+            <!-- Outer Ring -->
+            <circle cx="260" cy="260" r="120" stroke="url(#logoGradient)" stroke-width="2" stroke-dasharray="10 20"
+              opacity="0.6">
+              <animateTransform attributeName="transform" type="rotate" values="0 260 260; 360 260 260" dur="20s"
+                repeatCount="indefinite" />
+            </circle>
+
+            <circle cx="260" cy="260" r="140" stroke="rgba(240,180,41,0.3)" stroke-width="1" stroke-dasharray="6 12">
+              <animateTransform attributeName="transform" type="rotate" values="360 260 260; 0 260 260" dur="30s"
+                repeatCount="indefinite" />
+            </circle>
+
+            <!-- Main Logo Shield / Bug shape -->
+            <path
+              d="M260 160 C180 160 160 220 160 260 C160 340 220 380 260 380 C300 380 360 340 360 260 C360 220 340 160 260 160 Z"
+              fill="rgba(8,8,7,0.85)" stroke="url(#logoGradient)" stroke-width="3">
+              <animate attributeName="stroke-width" values="3;5;3" dur="3s" repeatCount="indefinite" />
+            </path>
+
+            <!-- Finebug Letters within logo -->
+            <text x="260" y="275" text-anchor="middle" font-family="'Playfair Display', serif" font-size="64"
+              font-weight="900" fill="url(#logoGradient)">
+              <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite" />
+              FB
+            </text>
+
+            <!-- Orbits & Accents -->
+            <circle cx="260" cy="160" r="6" fill="var(--gold)">
+              <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="260" cy="380" r="6" fill="var(--red)">
+              <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
+            </circle>
+
+            <!-- Finebug Text Arc -->
+            <text x="260" y="220" text-anchor="middle" font-family="'Space Mono', monospace" font-size="12"
+              letter-spacing="4" fill="rgba(246,241,234,0.7)">
+              FINEBUG
+            </text>
+            <text x="260" y="320" text-anchor="middle" font-family="'Space Mono', monospace" font-size="10"
+              letter-spacing="6" fill="rgba(232,69,42,0.8)">
+              DIGITAL
+            </text>
+          </g>
+
+          <!-- Outer floating elements -->
+          <rect x="80" y="100" width="60" height="60" rx="12" fill="rgba(232,69,42,0.1)" stroke="rgba(232,69,42,0.3)"
+            stroke-width="1.5">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,15; 0,0" dur="4s"
+              repeatCount="indefinite" />
+          </rect>
+          <text x="110" y="137" text-anchor="middle" font-size="20">✨</text>
+
+          <rect x="400" y="260" width="50" height="50" rx="25" fill="rgba(240,180,41,0.1)" stroke="rgba(240,180,41,0.3)"
+            stroke-width="1.5">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-15; 0,0" dur="4.5s"
+              repeatCount="indefinite" />
+          </rect>
+          <text x="425" y="292" text-anchor="middle" font-size="18">🚀</text>
+
+          <rect x="120" y="380" width="70" height="40" rx="8" fill="rgba(78,205,196,0.1)" stroke="rgba(78,205,196,0.3)"
+            stroke-width="1.5">
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,10; 0,0" dur="3.5s"
+              repeatCount="indefinite" />
+          </rect>
+          <text x="155" y="405" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold"
+            fill="rgba(78,205,196,0.8)">&lt;/&gt;</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-bar">
+    <div class="marquee-track">
+      <span class="marquee-item">Website Design</span>
+      <span class="marquee-item">Logo Design</span>
+      <span class="marquee-item">Company Profile</span>
+      <span class="marquee-item">Social Media Setup</span>
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">UI/UX Design</span>
+      <span class="marquee-item">Mobile Responsive</span>
+      <span class="marquee-item">SEO Ready</span>
+      <span class="marquee-item">Website Design</span>
+      <span class="marquee-item">Logo Design</span>
+      <span class="marquee-item">Company Profile</span>
+      <span class="marquee-item">Social Media Setup</span>
+      <span class="marquee-item">Brand Identity</span>
+      <span class="marquee-item">UI/UX Design</span>
+      <span class="marquee-item">Mobile Responsive</span>
+      <span class="marquee-item">SEO Ready</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-visual-side reveal">
+        <div class="about-floater">
+          <div class="floater-num">100%</div>
+          <div class="floater-text">Client Focused</div>
+        </div>
+        <div class="founder-card">
+          <div class="founder-avatar" style="padding:0; overflow:hidden;">
+            <img
+              src="https://media.licdn.com/dms/image/v2/D4D03AQFy9Q4Vazm0jA/profile-displayphoto-scale_200_200/B4DZzmfXKHIkAY-/0/1773393511123?e=1775088000&v=beta&t=2WQT4L6_PAweWlAKY0MxMEC51iLTcFXdBd6sTzj9C_c"
+              alt="Harikishan Yadav" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="founder-name">Harikishan Yadav</div>
+          <div class="founder-role">Founder & Creative Director</div>
+          <p class="founder-bio">With 4+ years of experience building digital products for businesses across India, I
+            started Finebug with one mission — to make world-class digital design accessible to every business, big or
+            small. Every project gets my full personal attention.</p>
+          <div class="founder-socials">
+            <a href="https://www.linkedin.com/company/finebug-soft" class="f-social" target="_blank"
+              title="LinkedIn">in</a>
+            <a href="https://www.instagram.com/fine.bug/" class="f-social" target="_blank" title="Instagram">ig</a>
+            <a href="https://www.youtube.com/@finebug" class="f-social" target="_blank" title="YouTube">yt</a>
+          </div>
+        </div>
+        <div class="about-stats-row">
+          <div class="a-stat">
+            <div class="a-stat-num">50+</div>
+            <div class="a-stat-label">Projects</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num">40+</div>
+            <div class="a-stat-label">Clients</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num">4yr</div>
+            <div class="a-stat-label">Experience</div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal d2">
+        <div class="section-eyebrow">About Finebug</div>
+        <h2 class="section-title">A <em>creative</em> agency that delivers results</h2>
+        <p class="section-body">Finebug is a boutique digital agency based in Ahmedabad, delivering cutting-edge digital
+          solutions for businesses of all sizes. From pixel-perfect websites to powerful brand identities — we turn your
+          vision into a digital reality.</p>
+        <p class="section-body">We combine sharp design craft with strategic thinking. Every project we take on gets a
+          tailored approach — because your business is unique, and your digital presence should be too.</p>
+        <p class="section-body">Whether you are a startup finding your identity or an established business looking for a
+          digital upgrade, Finebug is your partner in growth.</p>
+        <a href="#contact" class="btn-primary" style="margin-top:12px;">Work With Us <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="services-header reveal">
+      <div>
+        <div class="section-eyebrow" style="color:var(--red);">What We Deliver</div>
+        <h2 class="section-title light">Our <em>Services</em></h2>
+      </div>
+      <p class="services-intro">End-to-end digital solutions — from your first pixel to your final post.</p>
+    </div>
+
+    <div class="services-tabs reveal d1">
+      <!-- Tab Nav -->
+      <div class="stab-nav">
+        <button class="stab-btn active" onclick="switchTab('web',this)">🌐 Website Design</button>
+        <button class="stab-btn" onclick="switchTab('logo',this)">✏️ Logo Design</button>
+        <button class="stab-btn" onclick="switchTab('profile',this)">📋 Company Profile</button>
+        <button class="stab-btn" onclick="switchTab('social',this)">📲 Social Media</button>
+        <button class="stab-btn" onclick="switchTab('leadgen',this)">🎯 Lead Generation</button>
+      </div>
+
+      <!-- WEB TAB -->
+      <div class="stab-content active" id="tab-web">
+        <div class="service-detail">
+          <div class="service-detail-text">
+            <span class="service-icon-big">🌐</span>
+            <h3>Website <em>Design &amp; Development</em></h3>
+            <p>We design and build fast, beautiful, and mobile-ready websites that convert visitors into customers.
+              Every site is crafted for your specific business goals — not just made to look good.</p>
+            <ul class="service-features">
+              <li>Custom design tailored to your brand identity</li>
+              <li>Fully mobile responsive &amp; cross-browser compatible</li>
+              <li>SEO-optimised structure &amp; page speed optimisation</li>
+              <li>Contact forms, WhatsApp integration &amp; lead capture</li>
+              <li>Google Maps, social media &amp; CMS integration</li>
+              <li>Delivered within 7–14 business days</li>
+            </ul>
+            <a href="#contact" class="btn-primary">Get a Quote →</a>
+          </div>
+          <div class="service-visual">
+            <!-- Animated website illustration -->
+            <div class="svc-anim">
+              <svg viewBox="0 0 420 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <rect x="20" y="10" width="380" height="300" rx="12" fill="rgba(255,255,255,0.03)"
+                  stroke="rgba(255,255,255,0.1)" stroke-width="1.5" />
+                <rect x="20" y="10" width="380" height="36" rx="12" fill="rgba(255,255,255,0.06)" />
+                <circle cx="44" cy="28" r="5" fill="#e8452a" />
+                <circle cx="60" cy="28" r="5" fill="#f0b429" />
+                <circle cx="76" cy="28" r="5" fill="rgba(255,255,255,0.2)" />
+                <rect x="110" y="20" width="200" height="16" rx="8" fill="rgba(255,255,255,0.05)" />
+                <rect x="290" y="22" width="50" height="12" rx="6" fill="rgba(232,69,42,0.6)" />
+                <!-- Nav -->
+                <rect x="36" y="62" width="348" height="28" rx="4" fill="rgba(255,255,255,0.04)" />
+                <rect x="48" y="70" width="40" height="12" rx="3" fill="rgba(232,69,42,0.7)" />
+                <rect x="110" y="70" width="30" height="12" rx="3" fill="rgba(255,255,255,0.1)" />
+                <rect x="152" y="70" width="30" height="12" rx="3" fill="rgba(255,255,255,0.1)" />
+                <rect x="194" y="70" width="30" height="12" rx="3" fill="rgba(255,255,255,0.1)" />
+                <rect x="320" y="68" width="52" height="16" rx="8" fill="rgba(232,69,42,0.5)" />
+                <!-- Hero block -->
+                <rect x="36" y="104" width="210" height="100" rx="4" fill="rgba(255,255,255,0.025)" />
+                <rect x="48" y="114" width="120" height="14" rx="3" fill="rgba(255,255,255,0.2)" />
+                <rect x="48" y="134" width="90" height="10" rx="3" fill="rgba(255,255,255,0.1)" />
+                <rect x="48" y="150" width="100" height="10" rx="3" fill="rgba(255,255,255,0.08)" />
+                <rect x="48" y="170" width="70" height="22" rx="4" fill="rgba(232,69,42,0.7)" />
+                <!-- Hero image placeholder -->
+                <rect x="258" y="104" width="126" height="100" rx="4" fill="rgba(232,69,42,0.1)"
+                  stroke="rgba(232,69,42,0.2)" stroke-width="1" />
+                <text x="321" y="158" text-anchor="middle" font-size="28" fill="rgba(255,255,255,0.15)">🖼</text>
+                <!-- Cards row -->
+                <rect x="36" y="220" width="104" height="70" rx="6" fill="rgba(255,255,255,0.04)"
+                  stroke="rgba(255,255,255,0.08)" stroke-width="1">
+                  <animate attributeName="y" values="220;216;220" dur="3s" repeatCount="indefinite" />
+                </rect>
+                <rect x="154" y="220" width="104" height="70" rx="6" fill="rgba(255,255,255,0.04)"
+                  stroke="rgba(255,255,255,0.08)" stroke-width="1">
+                  <animate attributeName="y" values="220;224;220" dur="3.5s" repeatCount="indefinite" />
+                </rect>
+                <rect x="272" y="220" width="112" height="70" rx="6" fill="rgba(255,255,255,0.04)"
+                  stroke="rgba(232,69,42,0.25)" stroke-width="1">
+                  <animate attributeName="y" values="220;216;220" dur="4s" repeatCount="indefinite" />
+                </rect>
+                <text x="88" y="256" text-anchor="middle" font-size="20" fill="rgba(255,255,255,0.3)">⚡</text>
+                <text x="206" y="256" text-anchor="middle" font-size="20" fill="rgba(255,255,255,0.3)">🎨</text>
+                <text x="328" y="256" text-anchor="middle" font-size="20" fill="rgba(232,69,42,0.6)">📱</text>
+              </svg>
+            </div>
+            <div class="pricing-grid">
+              <div class="price-card">
+                <div class="price-tier">Basic</div>
+                <div class="price-name">Starter Site</div>
+                <div class="price-amount"><small>₹</small>8,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>Up to 5 Pages</li>
+                  <li><span class="pi">✦</span>Mobile Responsive</li>
+                  <li><span class="pi">✦</span>Contact Form</li>
+                  <li><span class="pi">✦</span>Basic SEO</li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">WhatsApp Integration</span></li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">CMS / Blog</span></li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card featured">
+                <div class="price-tier">Pro</div>
+                <div class="price-name">Business Site</div>
+                <div class="price-amount"><small>₹</small>7,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>Up to 10 Pages</li>
+                  <li><span class="pi">✦</span>Mobile Responsive</li>
+                  <li><span class="pi">✦</span>WhatsApp + Forms</li>
+                  <li><span class="pi">✦</span>Advanced SEO</li>
+                  <li><span class="pi">✦</span>Google Maps</li>
+                  <li><span class="pi">✦</span>1 Month Support</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card">
+                <div class="price-tier">Premium</div>
+                <div class="price-name">Full Solution</div>
+                <div class="price-amount"><small>₹</small>9,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>Unlimited Pages</li>
+                  <li><span class="pi">✦</span>CMS / Blog</li>
+                  <li><span class="pi">✦</span>All Integrations</li>
+                  <li><span class="pi">✦</span>Full SEO + Speed</li>
+                  <li><span class="pi">✦</span>3 Months Support</li>
+                  <li><span class="pi">✦</span>Logo + Social Setup</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGO TAB -->
+      <div class="stab-content" id="tab-logo">
+        <div class="service-detail">
+          <div class="service-detail-text">
+            <span class="service-icon-big">✏️</span>
+            <h3>Logo <em>Design</em></h3>
+            <p>Your logo is the face of your brand. We create memorable, timeless logos that tell your brand's story at
+              a glance — delivered in every format you need.</p>
+            <ul class="service-features">
+              <li>Custom logo concepts tailored to your industry</li>
+              <li>Multiple design concepts to choose from</li>
+              <li>Unlimited revisions until you love it</li>
+              <li>All file formats: PNG, SVG, PDF, AI</li>
+              <li>Brand colour palette and typography guide</li>
+              <li>Social media profile version included</li>
+            </ul>
+            <a href="#contact" class="btn-primary">Get a Quote →</a>
+          </div>
+          <div class="service-visual">
+            <div class="svc-anim">
+              <svg viewBox="0 0 420 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Canvas -->
+                <rect x="60" y="30" width="300" height="260" rx="8" fill="rgba(255,255,255,0.03)"
+                  stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+                <!-- Logo concept 1 -->
+                <g>
+                  <animate attributeName="opacity" values="1;0;0;1;1" dur="6s" repeatCount="indefinite" />
+                  <polygon points="210,70 240,120 180,120" fill="none" stroke="rgba(232,69,42,0.8)" stroke-width="3">
+                    <animate attributeName="points"
+                      values="210,70 240,120 180,120;210,65 245,118 175,118;210,70 240,120 180,120" dur="6s"
+                      repeatCount="indefinite" />
+                  </polygon>
+                  <text x="210" y="148" text-anchor="middle" font-family="serif" font-size="18" font-weight="900"
+                    fill="rgba(255,255,255,0.85)">BRAND</text>
+                  <text x="210" y="164" text-anchor="middle" font-family="sans-serif" font-size="9" letter-spacing="5"
+                    fill="rgba(232,69,42,0.7)">IDENTITY</text>
+                </g>
+                <!-- Concept 2 -->
+                <g opacity="0">
+                  <animate attributeName="opacity" values="0;0;1;1;0" dur="6s" repeatCount="indefinite" />
+                  <circle cx="210" cy="100" r="36" fill="none" stroke="rgba(240,180,41,0.7)" stroke-width="3">
+                    <animate attributeName="r" values="36;38;36" dur="2s" repeatCount="indefinite" />
+                  </circle>
+                  <text x="210" y="107" text-anchor="middle" font-family="serif" font-size="20" font-weight="900"
+                    fill="rgba(255,255,255,0.85)">FB</text>
+                  <text x="210" y="158" text-anchor="middle" font-family="sans-serif" font-size="11" letter-spacing="4"
+                    fill="rgba(240,180,41,0.7)">FINEBUG</text>
+                </g>
+                <!-- Color swatches -->
+                <rect x="90" y="200" width="36" height="36" rx="4" fill="#e8452a" />
+                <rect x="134" y="200" width="36" height="36" rx="4" fill="#f0b429" />
+                <rect x="178" y="200" width="36" height="36" rx="4" fill="rgba(255,255,255,0.85)" />
+                <rect x="222" y="200" width="36" height="36" rx="4" fill="#0a0a0a" stroke="rgba(255,255,255,0.2)"
+                  stroke-width="1" />
+                <rect x="266" y="200" width="36" height="36" rx="4" fill="rgba(78,205,196,0.8)" />
+                <!-- Pencil tool animation -->
+                <line x1="340" y1="40" x2="340" y2="180" stroke="rgba(255,255,255,0.15)" stroke-width="1"
+                  stroke-dasharray="4,4" />
+                <rect x="330" y="36" width="20" height="30" rx="2" fill="rgba(232,69,42,0.4)">
+                  <animate attributeName="y" values="36;120;36" dur="4s" repeatCount="indefinite" />
+                </rect>
+              </svg>
+            </div>
+            <div class="pricing-grid">
+              <div class="price-card">
+                <div class="price-tier">Basic</div>
+                <div class="price-name">Simple Logo</div>
+                <div class="price-amount"><small>₹</small>2,499</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>2 Concepts</li>
+                  <li><span class="pi">✦</span>2 Revisions</li>
+                  <li><span class="pi">✦</span>PNG + JPG Files</li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Vector Files</span></li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Brand Guide</span></li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card featured">
+                <div class="price-tier">Pro</div>
+                <div class="price-name">Pro Logo</div>
+                <div class="price-amount"><small>₹</small>5,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>4 Concepts</li>
+                  <li><span class="pi">✦</span>Unlimited Revisions</li>
+                  <li><span class="pi">✦</span>All File Formats</li>
+                  <li><span class="pi">✦</span>Colour Palette</li>
+                  <li><span class="pi">✦</span>Social Media Version</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card">
+                <div class="price-tier">Premium</div>
+                <div class="price-name">Brand Kit</div>
+                <div class="price-amount"><small>₹</small>6,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>6+ Concepts</li>
+                  <li><span class="pi">✦</span>Full Brand Guide</li>
+                  <li><span class="pi">✦</span>Stationery Design</li>
+                  <li><span class="pi">✦</span>Social Templates</li>
+                  <li><span class="pi">✦</span>Letterhead + Card</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPANY PROFILE TAB -->
+      <div class="stab-content" id="tab-profile">
+        <div class="service-detail">
+          <div class="service-detail-text">
+            <span class="service-icon-big">📋</span>
+            <h3>Company <em>Profile</em> Design</h3>
+            <p>A professional company profile is your most powerful offline and digital sales tool. We design impactful,
+              content-rich profiles that make the right first impression with clients and investors.</p>
+            <ul class="service-features">
+              <li>Custom branded layout and visual design</li>
+              <li>Content writing assistance included</li>
+              <li>PDF format ready for email and print</li>
+              <li>Editable source file handed over</li>
+              <li>8–16 pages depending on package</li>
+              <li>Delivered within 5–10 business days</li>
+            </ul>
+            <a href="#contact" class="btn-primary">Get a Quote →</a>
+          </div>
+          <div class="service-visual">
+            <div class="svc-anim">
+              <svg viewBox="0 0 420 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Document stack effect -->
+                <rect x="90" y="50" width="220" height="280" rx="8" fill="rgba(78,205,196,0.06)"
+                  stroke="rgba(78,205,196,0.15)" stroke-width="1.5" transform="rotate(6,200,190)" />
+                <rect x="90" y="50" width="220" height="280" rx="8" fill="rgba(255,255,255,0.03)"
+                  stroke="rgba(255,255,255,0.08)" stroke-width="1.5" transform="rotate(3,200,190)" />
+                <!-- Main document -->
+                <rect x="90" y="40" width="240" height="250" rx="8" fill="rgba(8,8,7,0.85)"
+                  stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                <!-- Header band -->
+                <rect x="90" y="40" width="240" height="60" rx="8" fill="rgba(232,69,42,0.7)" />
+                <rect x="90" y="80" width="240" height="20" fill="rgba(232,69,42,0.7)" />
+                <text x="210" y="75" text-anchor="middle" font-family="serif" font-size="14" font-weight="900"
+                  fill="white">COMPANY PROFILE</text>
+                <rect x="105" y="110" width="80" height="8" rx="4" fill="rgba(255,255,255,0.6)" />
+                <rect x="105" y="124" width="55" height="6" rx="3" fill="rgba(255,255,255,0.3)" />
+                <!-- Content rows with animation -->
+                <rect x="105" y="148" width="200" height="5" rx="2.5" fill="rgba(255,255,255,0.12)">
+                  <animate attributeName="width" values="200;180;200" dur="3s" repeatCount="indefinite" />
+                </rect>
+                <rect x="105" y="160" width="160" height="5" rx="2.5" fill="rgba(255,255,255,0.08)">
+                  <animate attributeName="width" values="160;200;160" dur="4s" repeatCount="indefinite" />
+                </rect>
+                <rect x="105" y="172" width="180" height="5" rx="2.5" fill="rgba(255,255,255,0.08)" />
+                <rect x="105" y="184" width="140" height="5" rx="2.5" fill="rgba(255,255,255,0.06)" />
+                <!-- Info boxes -->
+                <rect x="105" y="204" width="58" height="50" rx="4" fill="rgba(232,69,42,0.15)"
+                  stroke="rgba(232,69,42,0.3)" stroke-width="1">
+                  <animate attributeName="height" values="50;46;50" dur="3s" repeatCount="indefinite" />
+                </rect>
+                <rect x="173" y="204" width="58" height="50" rx="4" fill="rgba(240,180,41,0.12)"
+                  stroke="rgba(240,180,41,0.25)" stroke-width="1">
+                  <animate attributeName="height" values="50;54;50" dur="3.5s" repeatCount="indefinite" />
+                </rect>
+                <rect x="241" y="204" width="58" height="50" rx="4" fill="rgba(78,205,196,0.12)"
+                  stroke="rgba(78,205,196,0.25)" stroke-width="1">
+                  <animate attributeName="height" values="50;46;50" dur="4s" repeatCount="indefinite" />
+                </rect>
+                <text x="134" y="234" text-anchor="middle" font-family="serif" font-size="14" font-weight="900"
+                  fill="rgba(232,69,42,0.9)">15+</text>
+                <text x="202" y="234" text-anchor="middle" font-family="serif" font-size="14" font-weight="900"
+                  fill="rgba(240,180,41,0.9)">50+</text>
+                <text x="270" y="234" text-anchor="middle" font-family="serif" font-size="14" font-weight="900"
+                  fill="rgba(78,205,196,0.9)">100%</text>
+                <text x="134" y="246" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="1"
+                  fill="rgba(255,255,255,0.3)">YEARS</text>
+                <text x="202" y="246" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="1"
+                  fill="rgba(255,255,255,0.3)">CLIENTS</text>
+                <text x="270" y="246" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="1"
+                  fill="rgba(255,255,255,0.3)">QUALITY</text>
+              </svg>
+            </div>
+            <div class="pricing-grid">
+              <div class="price-card">
+                <div class="price-tier">Basic</div>
+                <div class="price-name">Simple Profile</div>
+                <div class="price-amount"><small>₹</small>3,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>8 Pages</li>
+                  <li><span class="pi">✦</span>Custom Design</li>
+                  <li><span class="pi">✦</span>PDF Format</li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Editable File</span></li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Content Writing</span></li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card featured">
+                <div class="price-tier">Pro</div>
+                <div class="price-name">Pro Profile</div>
+                <div class="price-amount"><small>₹</small>7,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>12 Pages</li>
+                  <li><span class="pi">✦</span>Premium Design</li>
+                  <li><span class="pi">✦</span>PDF + Editable</li>
+                  <li><span class="pi">✦</span>Content Assistance</li>
+                  <li><span class="pi">✦</span>2 Revisions</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card">
+                <div class="price-tier">Premium</div>
+                <div class="price-name">Full Profile</div>
+                <div class="price-amount"><small>₹</small>8,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>16+ Pages</li>
+                  <li><span class="pi">✦</span>Infographics</li>
+                  <li><span class="pi">✦</span>Full Content Writing</li>
+                  <li><span class="pi">✦</span>Print + Digital Ready</li>
+                  <li><span class="pi">✦</span>Unlimited Revisions</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOCIAL MEDIA TAB -->
+      <div class="stab-content" id="tab-social">
+        <div class="service-detail">
+          <div class="service-detail-text">
+            <span class="service-icon-big">📲</span>
+            <h3>Social Media <em>Profile Setup</em></h3>
+            <p>Your social media profiles are your digital storefront. We set up and optimise your Instagram, Facebook,
+              LinkedIn and WhatsApp Business profiles to look professional and attract the right customers.</p>
+            <ul class="service-features">
+              <li>Profile &amp; cover photo design (all platforms)</li>
+              <li>Bio optimisation with keywords</li>
+              <li>Story highlight covers design</li>
+              <li>Platform setup: Instagram, Facebook, LinkedIn</li>
+              <li>WhatsApp Business profile configuration</li>
+              <li>5 post templates included (Pro &amp; Premium)</li>
+            </ul>
+            <a href="#contact" class="btn-primary">Get a Quote →</a>
+          </div>
+          <div class="service-visual">
+            <div class="svc-anim">
+              <svg viewBox="0 0 420 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Phone mockup -->
+                <rect x="150" y="10" width="120" height="210" rx="16" fill="rgba(255,255,255,0.04)"
+                  stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+                <!-- Screen -->
+                <rect x="156" y="24" width="108" height="188" rx="10" fill="rgba(8,8,7,0.9)" />
+                <!-- Profile area -->
+                <rect x="156" y="24" width="108" height="50" rx="10" fill="rgba(232,69,42,0.3)" />
+                <rect x="156" y="54" width="108" height="20" fill="rgba(232,69,42,0.3)" />
+                <circle cx="210" cy="78" r="18" fill="rgba(8,8,7,0.9)" stroke="rgba(255,255,255,0.3)"
+                  stroke-width="2" />
+                <circle cx="210" cy="78" r="14" fill="rgba(232,69,42,0.8)" />
+                <text x="210" y="83" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="900"
+                  fill="white">FB</text>
+                <text x="210" y="110" text-anchor="middle" font-family="sans-serif" font-size="8" font-weight="700"
+                  fill="rgba(255,255,255,0.9)">@finebug</text>
+                <text x="210" y="122" text-anchor="middle" font-family="sans-serif" font-size="6" letter-spacing="1"
+                  fill="rgba(255,255,255,0.4)">Digital Agency</text>
+                <!-- Posts grid -->
+                <rect x="162" y="132" width="30" height="30" rx="2" fill="rgba(232,69,42,0.4)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite" />
+                </rect>
+                <rect x="196" y="132" width="30" height="30" rx="2" fill="rgba(240,180,41,0.4)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="2.5s" repeatCount="indefinite" />
+                </rect>
+                <rect x="230" y="132" width="30" height="30" rx="2" fill="rgba(78,205,196,0.4)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="3s" repeatCount="indefinite" />
+                </rect>
+                <rect x="162" y="166" width="30" height="30" rx="2" fill="rgba(155,89,182,0.4)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="3.5s" repeatCount="indefinite" />
+                </rect>
+                <rect x="196" y="166" width="30" height="30" rx="2" fill="rgba(232,69,42,0.3)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite" />
+                </rect>
+                <rect x="230" y="166" width="30" height="30" rx="2" fill="rgba(52,152,219,0.4)">
+                  <animate attributeName="opacity" values="1;0.6;1" dur="2.8s" repeatCount="indefinite" />
+                </rect>
+                <!-- Platform icons floating -->
+                <circle cx="90" cy="80" r="26" fill="rgba(232,69,42,0.15)" stroke="rgba(232,69,42,0.3)"
+                  stroke-width="1.5">
+                  <animate attributeName="r" values="26;24;26" dur="3s" repeatCount="indefinite" />
+                </circle>
+                <text x="90" y="87" text-anchor="middle" font-size="20">📘</text>
+                <circle cx="340" cy="100" r="26" fill="rgba(240,180,41,0.12)" stroke="rgba(240,180,41,0.25)"
+                  stroke-width="1.5">
+                  <animate attributeName="r" values="26;28;26" dur="4s" repeatCount="indefinite" />
+                </circle>
+                <text x="340" y="107" text-anchor="middle" font-size="20">📸</text>
+                <circle cx="80" cy="200" r="22" fill="rgba(52,152,219,0.12)" stroke="rgba(52,152,219,0.25)"
+                  stroke-width="1.5">
+                  <animate attributeName="r" values="22;24;22" dur="3.5s" repeatCount="indefinite" />
+                </circle>
+                <text x="80" y="207" text-anchor="middle" font-size="18">💼</text>
+                <circle cx="350" cy="220" r="22" fill="rgba(37,211,102,0.12)" stroke="rgba(37,211,102,0.25)"
+                  stroke-width="1.5">
+                  <animate attributeName="r" values="22;20;22" dur="5s" repeatCount="indefinite" />
+                </circle>
+                <text x="350" y="227" text-anchor="middle" font-size="18">💬</text>
+              </svg>
+            </div>
+            <div class="pricing-grid">
+              <div class="price-card">
+                <div class="price-tier">Basic</div>
+                <div class="price-name">Starter Setup</div>
+                <div class="price-amount"><small>₹</small>1,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>1 Platform</li>
+                  <li><span class="pi">✦</span>Profile Photo Design</li>
+                  <li><span class="pi">✦</span>Bio Optimisation</li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Highlight Covers</span></li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Post Templates</span></li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card featured">
+                <div class="price-tier">Pro</div>
+                <div class="price-name">Pro Setup</div>
+                <div class="price-amount"><small>₹</small>4,499</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>3 Platforms</li>
+                  <li><span class="pi">✦</span>All Profile Art</li>
+                  <li><span class="pi">✦</span>Highlight Covers</li>
+                  <li><span class="pi">✦</span>5 Post Templates</li>
+                  <li><span class="pi">✦</span>WhatsApp Business</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card">
+                <div class="price-tier">Premium</div>
+                <div class="price-name">Full Brand</div>
+                <div class="price-amount"><small>₹</small>8,999</div>
+                <div class="price-period">one-time</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>All Platforms</li>
+                  <li><span class="pi">✦</span>10 Post Templates</li>
+                  <li><span class="pi">✦</span>Reel Cover Designs</li>
+                  <li><span class="pi">✦</span>Content Strategy</li>
+                  <li><span class="pi">✦</span>1 Month Management</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEAD GEN TAB -->
+      <div class="stab-content" id="tab-leadgen">
+        <div class="service-detail">
+          <div class="service-detail-text">
+            <span class="service-icon-big">🎯</span>
+            <h3>Lead Generation <em>&amp; Advertising</em></h3>
+            <p>Stop waiting for customers to find you. Our lead generation funnel runs targeted ads that drive
+              high-quality prospects straight to your inbox and WhatsApp.</p>
+            <ul class="service-features">
+              <li><b>1. The Ad:</b> We create scroll-stopping Facebook/Instagram &amp; Google Ads to attract your ideal
+                audience.</li>
+              <li><b>2. The Capture:</b> Traffic is sent to an optimized, high-converting Landing Page (or native lead
+                form).</li>
+              <li><b>3. The Delivery:</b> Leads are delivered to you instantly via WhatsApp or Email.</li>
+              <li>Campaign strategy, ad copy, and creative design included</li>
+              <li>A/B testing and daily optimization for lower cost-per-lead</li>
+              <li>Clear reporting with ROI tracking</li>
+            </ul>
+            <a href="#contact" class="btn-primary">Start Getting Leads →</a>
+          </div>
+          <div class="service-visual">
+            <div class="svc-anim">
+              <svg viewBox="0 0 420 320" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <!-- Funnel Background -->
+                <polygon points="60,40 360,40 250,160 250,260 170,260 170,160" fill="rgba(255,255,255,0.03)"
+                  stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
+
+                <!-- Ad source 1 -->
+                <rect x="80" y="10" width="80" height="40" rx="6" fill="rgba(52,152,219,0.15)"
+                  stroke="rgba(52,152,219,0.3)" stroke-width="1" />
+                <text x="120" y="34" text-anchor="middle" font-size="12" fill="rgba(52,152,219,0.8)">Facebook Ads</text>
+                <circle cx="120" cy="50" r="3" fill="#3498db">
+                  <animate attributeName="cy" values="50;100;100;50" dur="2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="1;1;0;0" dur="2s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- Ad source 2 -->
+                <rect x="260" y="10" width="80" height="40" rx="6" fill="rgba(232,69,42,0.15)"
+                  stroke="rgba(232,69,42,0.3)" stroke-width="1" />
+                <text x="300" y="34" text-anchor="middle" font-size="12" fill="rgba(232,69,42,0.8)">Google Ads</text>
+                <circle cx="300" cy="50" r="3" fill="#e8452a">
+                  <animate attributeName="cy" values="50;100;100;50" dur="2.5s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="1;1;0;0" dur="2.5s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- Landing Page Level -->
+                <rect x="140" y="100" width="140" height="50" rx="6" fill="rgba(240,180,41,0.15)"
+                  stroke="rgba(240,180,41,0.3)" stroke-width="1" />
+                <text x="210" y="124" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="bold"
+                  fill="rgba(240,180,41,0.9)">LANDING PAGE</text>
+                <rect x="180" y="132" width="60" height="8" rx="4" fill="rgba(240,180,41,0.6)" />
+
+                <!-- Lead drops -->
+                <circle cx="210" cy="150" r="4" fill="#f0b429">
+                  <animate attributeName="cy" values="150;270;270;150" dur="3s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="1;1;0;0" dur="3s" repeatCount="indefinite" />
+                </circle>
+
+                <!-- Inbox / WhatsApp -->
+                <rect x="170" y="270" width="80" height="40" rx="6" fill="rgba(37,211,102,0.15)"
+                  stroke="rgba(37,211,102,0.3)" stroke-width="1" />
+                <text x="210" y="294" text-anchor="middle" font-size="12" fill="rgba(37,211,102,0.9)">WhatsApp
+                  Lead</text>
+              </svg>
+            </div>
+            <div class="pricing-grid">
+              <div class="price-card">
+                <div class="price-tier">Basic</div>
+                <div class="price-name">Lead Setup</div>
+                <div class="price-amount"><small>₹</small>7,999</div>
+                <div class="price-period">one-time setup</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>1 Ad Platform (Meta)</li>
+                  <li><span class="pi">✦</span>Lead Form Setup</li>
+                  <li><span class="pi">✦</span>3 Ad Creatives</li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Custom Landing Page</span></li>
+                  <li><span class="pi no">✗</span><span style="opacity:.4">Monthly Management</span></li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card featured">
+                <div class="price-tier">Pro</div>
+                <div class="price-name">Performance</div>
+                <div class="price-amount"><small>₹</small>7,999</div>
+                <div class="price-period">per month</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>Meta + Google Ads</li>
+                  <li><span class="pi">✦</span>High-Converting Landing Page</li>
+                  <li><span class="pi">✦</span>A/B Testing Creatives</li>
+                  <li><span class="pi">✦</span>WhatsApp Automation</li>
+                  <li><span class="pi">✦</span>Weekly Optimization</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+              <div class="price-card">
+                <div class="price-tier">Premium</div>
+                <div class="price-name">Growth</div>
+                <div class="price-amount"><small>₹</small>9,999</div>
+                <div class="price-period">per month</div>
+                <ul class="price-items">
+                  <li><span class="pi">✦</span>Omnichannel Ads</li>
+                  <li><span class="pi">✦</span>Multiple Landing Pages</li>
+                  <li><span class="pi">✦</span>Retargeting Campaigns</li>
+                  <li><span class="pi">✦</span>CRM Integration</li>
+                  <li><span class="pi">✦</span>Dedicated Manager</li>
+                </ul>
+                <a href="#contact" class="price-btn">Get Started</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="work-header reveal">
+      <div>
+        <div class="section-eyebrow" style="color:var(--red);">Portfolio</div>
+        <h2 class="section-title light">Our <em>Work</em></h2>
+      </div>
+      <a href="#contact" class="view-all">Start Your Project →</a>
+    </div>
+    <div class="work-filter reveal d1">
+      <button class="wf-btn active" onclick="filterWork('all',this)">All Work</button>
+      <button class="wf-btn" onclick="filterWork('website',this)">Websites</button>
+      <button class="wf-btn" onclick="filterWork('logo',this)">Logo Design</button>
+      <button class="wf-btn" onclick="filterWork('profile',this)">Company Profile</button>
+      <button class="wf-btn" onclick="filterWork('social',this)">Social Media</button>
+      <button class="wf-btn" onclick="filterWork('leadgen',this)">Lead Generation</button>
+    </div>
+    <div class="work-grid" id="workGrid">
+      <div class="work-card span2 reveal" data-cat="website">
+        <div class="work-card-bg wbg1"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Website Design</div>
+        <div class="work-title">Horizon Constructions — Full Corporate Website</div>
+      </div>
+      <div class="work-card reveal d1" data-cat="logo">
+        <div class="work-card-bg wbg2"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Logo Design</div>
+        <div class="work-title">Apex Realtors Brand Identity</div>
+      </div>
+      <div class="work-card reveal d1" data-cat="social">
+        <div class="work-card-bg wbg3"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Social Media Setup</div>
+        <div class="work-title">GreenLeaf Cafe</div>
+      </div>
+      <div class="work-card reveal d2" data-cat="website">
+        <div class="work-card-bg wbg4"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Website + Logo</div>
+        <div class="work-title">Nova Pharma Digital</div>
+      </div>
+      <div class="work-card reveal d2" data-cat="profile">
+        <div class="work-card-bg wbg5"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Company Profile</div>
+        <div class="work-title">Zephyr Exports Ltd.</div>
+      </div>
+      <div class="work-card reveal d3" data-cat="logo">
+        <div class="work-card-bg wbg6"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Full Brand Package</div>
+        <div class="work-title">Monarch Hotels</div>
+      </div>
+      <div class="work-card reveal d1" data-cat="website">
+        <div class="work-card-bg wbg1" style="opacity:.5"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Website Design</div>
+        <div class="work-title">Sunrise Solar Solutions</div>
+      </div>
+      <div class="work-card reveal d2" data-cat="social">
+        <div class="work-card-bg wbg3" style="opacity:.5"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Social Media</div>
+        <div class="work-title">FreshBite Food Delivery</div>
+      </div>
+      <div class="work-card reveal d3" data-cat="profile">
+        <div class="work-card-bg wbg2" style="opacity:.5"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Company Profile</div>
+        <div class="work-title">Kalptaru Infra</div>
+      </div>
+      <div class="work-card reveal d1" data-cat="leadgen">
+        <div class="work-card-bg wbg4"></div>
+        <div class="work-arrow">↗</div>
+        <div class="work-cat">Lead Generation</div>
+        <div class="work-title">Fitness Studio Ad Campaign (300% ROI)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="process-header reveal">
+      <div class="section-eyebrow" style="justify-content:center;">How We Work</div>
+      <h2 class="section-title" style="color:var(--black);">Simple, <em>transparent</em> process</h2>
+      <p class="section-body" style="color:rgba(8,8,7,.55);">No jargon. No surprises. Just a clear path from brief to
+        brilliant — every single time.</p>
+    </div>
+    <div class="process-timeline">
+      <div class="process-step reveal d1">
+        <div class="p-dot"><span class="p-dot-icon">💬</span><span class="p-dot-num">01</span></div>
+        <div class="p-title">Discovery Call</div>
+        <p class="p-desc">We start with a free consultation to understand your business, goals, target audience, and
+          what success looks like for you.</p>
+      </div>
+      <div class="process-step reveal d2">
+        <div class="p-dot"><span class="p-dot-icon">📐</span><span class="p-dot-num">02</span></div>
+        <div class="p-title">Plan &amp; Proposal</div>
+        <p class="p-desc">We send a clear proposal with scope, timeline, and pricing. Once approved, we begin planning
+          the structure and visual direction.</p>
+      </div>
+      <div class="process-step reveal d3">
+        <div class="p-dot"><span class="p-dot-icon">🎨</span><span class="p-dot-num">03</span></div>
+        <div class="p-title">Design &amp; Build</div>
+        <p class="p-desc">We design and build your project with regular progress updates. You review and give feedback —
+          we refine until it's perfect.</p>
+      </div>
+      <div class="process-step reveal d4">
+        <div class="p-dot"><span class="p-dot-icon">🚀</span><span class="p-dot-num">04</span></div>
+        <div class="p-title">Launch &amp; Support</div>
+        <p class="p-desc">We launch your project, hand over all files, and provide post-launch support so you feel
+          confident moving forward.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="testimonials-header reveal">
+      <div>
+        <div class="section-eyebrow">Client Reviews</div>
+        <h2 class="section-title">What our <em>clients</em> say</h2>
+      </div>
+      <p class="t-intro">We let our work speak for itself — but it helps when our clients speak too. Here's what
+        businesses say after working with Finebug.</p>
+    </div>
+    <div class="t-grid">
+      <div class="t-card reveal">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Finebug completely transformed our online presence. The website they built is fast,
+          beautiful, and within two months it had already doubled our inbound leads."</p>
+        <div class="t-author">
+          <div class="t-av" style="background:linear-gradient(135deg,#e8452a,#f0b429);">RK</div>
+          <div>
+            <div class="t-name">Rahul Kapoor</div>
+            <div class="t-role">Director, Horizon Constructions</div>
+          </div>
+        </div>
+      </div>
+      <div class="t-card reveal d1">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"The logo and brand kit they designed for us is world-class. Our clients constantly compliment
+          how professional we look. Best investment we made."</p>
+        <div class="t-author">
+          <div class="t-av" style="background:linear-gradient(135deg,#4ecdc4,#2c7be5);">SP</div>
+          <div>
+            <div class="t-name">Sneha Patel</div>
+            <div class="t-role">Founder, Apex Realtors</div>
+          </div>
+        </div>
+      </div>
+      <div class="t-card reveal d2">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Our company profile is something we're proud to send to every prospect. The design quality is
+          outstanding and the turnaround was incredibly fast."</p>
+        <div class="t-author">
+          <div class="t-av" style="background:linear-gradient(135deg,#9b59b6,#e8452a);">MJ</div>
+          <div>
+            <div class="t-name">Mihir Joshi</div>
+            <div class="t-role">MD, Zephyr Exports</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="t-clients reveal d2">
+      <div class="t-client">
+        <div class="t-client-name">Horizon Constructions</div>
+      </div>
+      <div class="t-client">
+        <div class="t-client-name">Apex Realtors</div>
+      </div>
+      <div class="t-client">
+        <div class="t-client-name">GreenLeaf Cafe</div>
+      </div>
+      <div class="t-client">
+        <div class="t-client-name">Zephyr Exports</div>
+      </div>
+      <div class="t-client">
+        <div class="t-client-name">Nova Pharma</div>
+      </div>
+      <div class="t-client">
+        <div class="t-client-name">Monarch Hotels</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="contact-info reveal">
+        <div class="section-eyebrow">Get In Touch</div>
+        <h2 class="section-title" style="color:var(--white);">Let's build something <em>great</em> together</h2>
+        <p class="contact-tagline">Have a project in mind? Drop us a message and we'll get back to you within 24 hours
+          with a free consultation.</p>
+        <div class="contact-detail">
+          <div class="cd-icon">📧</div>
+          <div>
+            <div class="cd-label">Email</div>
+            <div class="cd-val">hello@finebug.in</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon">📱</div>
+          <div>
+            <div class="cd-label">Phone / WhatsApp</div>
+            <div class="cd-val">+91 98765 43210</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon">📍</div>
+          <div>
+            <div class="cd-label">Location</div>
+            <div class="cd-val">Ahmedabad, Gujarat, India</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="cd-icon">⏱️</div>
+          <div>
+            <div class="cd-label">Response Time</div>
+            <div class="cd-val">Within 24 hours</div>
+          </div>
+        </div>
+        <div class="contact-socials">
+          <a href="https://www.linkedin.com/company/finebug-soft" class="cs-link" title="LinkedIn"
+            target="_blank">in</a>
+          <a href="https://www.instagram.com/fine.bug/" class="cs-link" title="Instagram" target="_blank">ig</a>
+          <a href="https://www.youtube.com/@finebug" class="cs-link" title="YouTube" target="_blank">yt</a>
+          <a href="https://wa.me/919876543210" class="cs-link" title="WhatsApp" target="_blank">wa</a>
+        </div>
+      </div>
+      <div class="contact-form reveal d2" id="contactForm">
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-control" placeholder="e.g. Rahul Shah" id="fname">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Your Email</label>
+            <input type="email" class="form-control" placeholder="rahul@company.com" id="femail">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Phone / WhatsApp</label>
+            <input type="tel" class="form-control" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">Company Name</label>
+            <input type="text" class="form-control" placeholder="Your Business Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Service Needed</label>
+          <select class="form-control">
+            <option value="" disabled selected>Select a service…</option>
+            <option>Website Design &amp; Development</option>
+            <option>Logo Design</option>
+            <option>Company Profile</option>
+            <option>Social Media Profile Setup</option>
+            <option>Lead Generation &amp; Advertising</option>
+            <option>Full Package (Website + Logo + Social + Ads)</option>
+            <option>Something Else</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Budget Range</label>
+          <select class="form-control">
+            <option value="" disabled selected>Select budget…</option>
+            <option>Under ₹3,000</option>
+            <option>₹3,000 – ₹5,000</option>
+            <option>₹5,000 – ₹8,000</option>
+            <option>₹8,000 – ₹10,000</option>
+            <option>Custom Enterprise</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell Us About Your Project</label>
+          <textarea class="form-control"
+            placeholder="Describe your business, what you need, and any specific requirements…"></textarea>
+        </div>
+        <button class="btn-send" onclick="submitForm()">Send Message — We'll Reply in 24hrs</button>
+        <div class="form-success" id="formSuccess">
+          🎉 Thank you! We'll be in touch within 24 hours.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo">Fine<span>bug</span></div>
+      <div class="footer-tagline">Cutting-edge digital solutions for modern businesses.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-copy">© 2025 Finebug. All rights reserved. · Ahmedabad, India</div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cur = document.getElementById('cur'), cur2 = document.getElementById('cur2');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+    function animCursor() { rx += (mx - rx) * .15; ry += (my - ry) * .15; cur2.style.left = rx + 'px'; cur2.style.top = ry + 'px'; requestAnimationFrame(animCursor); }
+    animCursor();
+    document.querySelectorAll('a,button,.work-card,.t-card,.price-card,.process-step').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.width = '18px'; cur.style.height = '18px'; cur2.style.width = '56px'; cur2.style.height = '56px'; });
+      el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; cur2.style.width = '32px'; cur2.style.height = '32px'; });
+    });
+
+    // Nav scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+
+    // Mobile menu
+    function toggleMobile() {
+      const m = document.getElementById('mobileMenu'), h = document.getElementById('hamburger');
+      m.classList.toggle('open'); h.classList.toggle('open');
+    }
+    function closeMobile() {
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+    }
+
+    // Scroll reveal
+    const ro = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: .1 });
+    document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+    // Service tabs
+    function switchTab(id, btn) {
+      document.querySelectorAll('.stab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.stab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Work filter
+    function filterWork(cat, btn) {
+      document.querySelectorAll('.wf-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.work-card').forEach(card => {
+        const c = card.dataset.cat || '';
+        const show = cat === 'all' || c === cat;
+        card.style.display = show ? 'flex' : 'none';
+      });
+      // Reset span2 for website filter
+      document.querySelectorAll('.work-card').forEach(card => {
+        if (card.classList.contains('span2') && card.style.display === 'none') {
+          const next = card.nextElementSibling;
+          if (next) next.style.gridColumn = '';
+        }
+      });
+    }
+
+    // Contact form
+    function submitForm() {
+      const n = document.getElementById('fname').value;
+      const e = document.getElementById('femail').value;
+      if (!n || !e) { alert('Please fill in your name and email.'); return; }
+      document.querySelector('.btn-send').style.display = 'none';
+      document.querySelectorAll('#contactForm .form-control').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('#contactForm .form-label').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('#contactForm .form-row').forEach(el => el.style.display = 'none');
+      document.getElementById('formSuccess').style.display = 'block';
+    }
+  </script>
+</body>
+
+</html>
